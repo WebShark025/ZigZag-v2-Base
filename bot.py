@@ -148,5 +148,25 @@ def callback_inline(call):
       except Exception as e:
         zigzag.error("Error: " + str(e))
 
+# Define inline function
+@bot.inline_handler(func=lambda query: True)
+def inline_hand(inlinequery):
+  for plugin in pllist:
+    exec("pln = pl" + plugin + ".inlines")
+    try:
+      for rgx in pln:
+        rlnumber = re.compile(rgx)
+        args = inlinequery.query
+        if rlnumber.search(args):
+          exec("p = multiprocessing.Process(target=inline" + str(plugin) + "(inlinequery))")
+          p.start()
+    except Exception as e:
+      zigzag.error("Error: " + str(e))
+    if len(inlinequery.query) is 0:
+      for rgx in pln:
+        if rgx == "DEFAULTQUERY":
+          exec("p = multiprocessing.Process(target=inline" + str(plugin) + "(inlinequery))")
+          p.start()
+
 # Poll! Lets go.
 bot.polling(none_stop=True, interval=0, timeout=3)

@@ -35,8 +35,14 @@ class textcolor:
     RESET = '\x1b[0m'
 
 # Define zigzag basics
-#class zigzag:
-#    error = print("text")
+class Zig:
+    def error(self, string):
+        self.string = string
+        print(textcolor.FAIL + self.string)
+
+zigzag = Zig()
+# test purpose:
+zig.error("Hi")
 
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")

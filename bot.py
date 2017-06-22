@@ -9,6 +9,18 @@
 ####################################
 
 
+# Imports
+import datetime
+import os
+import telebot
+import re
+import sys
+import redis
+import time as tm
+from shutil import copyfile
+from telebot import types
+
+
 
 # Check for CONFIG file and LOCALE file
 if not os.path.exists("config.py"):

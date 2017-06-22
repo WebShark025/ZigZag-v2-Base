@@ -10,6 +10,7 @@
 
 
 # Imports
+import multiprocessing
 import datetime
 import os
 import telebot
@@ -41,7 +42,7 @@ class Zig:
         self.string = string
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
-        print(textcolor.FAIL + pluginname + self.string)
+        print(textcolor.FAIL + "[" + pluginname + "] " + self.string + textcolor.RESET)
 
 zigzag = Zig()
 # test purpose:
@@ -107,13 +108,14 @@ time = datetime.datetime.now()
 print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time) + textcolor.RESET)
 
 # Define message handler function.
-def message_replier():
+def message_replier(messages):
   for message in messages:
     for plugin in pllist:
       try:
         exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+        p.start()
       except Exception as e:
-        zigzag.error("Error")
+        zigzag.error("Error: " + str(e))
 
 # Set message handler!
 bot.set_update_listener(message_replier)

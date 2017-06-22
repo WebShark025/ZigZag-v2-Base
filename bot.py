@@ -132,5 +132,21 @@ def message_replier(messages):
 # Set message handler!
 bot.set_update_listener(message_replier)
 
+# Define callback data.
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+  if call.message:
+    for plugin in pllist:
+      exec("pln = pl" + plugin + ".callbacks")
+      try:
+        for rgx in pln:
+          rlnumber = re.compile(rgx)
+          args = call.data
+          if rlnumber.search(args):
+            exec("p = multiprocessing.Process(target=call" + str(plugin) + "(call))")
+            p.start()
+      except Exception as e:
+        zigzag.error("Error: " + str(e))
+
 # Poll! Lets go.
 bot.polling(none_stop=True, interval=0, timeout=3)

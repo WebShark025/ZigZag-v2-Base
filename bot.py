@@ -34,6 +34,10 @@ class textcolor:
     UNDERLINE = '\033[4m'
     RESET = '\x1b[0m'
 
+# Define zigzag basics
+#class zigzag:
+#    error = print("text")
+
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
@@ -46,6 +50,9 @@ print("#########################################")
 print("#########################################")
 tm.sleep(5)
 print("\n\n\n\n\n\n")
+
+# Enabled plugins list.
+pllist = []
 
 # Check for CONFIG file and LOCALE file
 if not os.path.exists("config.py"):
@@ -82,6 +89,7 @@ for plugin in enabled_plugins:
   try:
     execfile("plugins/" + plugin + ".py")
     print(textcolor.OKBLUE + "Plugin enabled successfully: " + plugin)
+    pllist.append(plugin)
   except Exception as ex:
     print(textcolor.FAIL + "Could not enable plugin: " + plugin + ". Error:")
     print(textcolor.WARNING + str(ex))
@@ -89,8 +97,17 @@ for plugin in enabled_plugins:
 time = datetime.datetime.now()
 print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time) + textcolor.RESET)
 
+# Define message handler function.
+def message_replier():
+  for message in messages:
+    for plugin in pllist:
+      try:
+        exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+      except Exception as e:
+        zigzag.error("Error")
+
 # Set message handler!
-#bot.set_update_listener(message_replier)
+bot.set_update_listener(message_replier)
 
 # Poll! Lets go.
 bot.polling(none_stop=True, interval=0, timeout=3)

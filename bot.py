@@ -43,6 +43,13 @@ class Zig:
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
         print(textcolor.FAIL + "[" + pluginname + "] " + self.string + textcolor.RESET)
+    def info(self, string):
+        self.string = string
+        stack = inspect.stack()
+        pluginname = stack[1][0].f_code.co_name
+        print(textcolor.RESET + "[" + pluginname + "] " + self.string + textcolor.RESET)
+
+
 
 zigzag = Zig()
 # test purpose:
@@ -111,9 +118,14 @@ print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time)
 def message_replier(messages):
   for message in messages:
     for plugin in pllist:
+      exec("pln = pl" + plugin + ".patterns")
       try:
-        exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
-        p.start()
+        for rgx in pln:
+          rlnumber = re.compile(rgx)
+          args = message.text
+          if rlnumber.search(args):
+            exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+            p.start()
       except Exception as e:
         zigzag.error("Error: " + str(e))
 

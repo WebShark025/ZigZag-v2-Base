@@ -6,5 +6,5 @@ config = {
 
 enabled_plugins = [
 "echo",
-"clock,
+"clock",
 ]

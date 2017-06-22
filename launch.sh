@@ -8,6 +8,5 @@ echo " "
 #    echo "Bot has crashed! Launching it again."
 #  done
 #else
-python3 bot.py
+python2.7 bot.py
 echo "Bot stopped. exiting"
-fi

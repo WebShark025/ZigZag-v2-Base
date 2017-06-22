@@ -18,6 +18,7 @@ import sys
 import redis
 import time as tm
 import requests
+import inspect
 from shutil import copyfile
 from telebot import types
 
@@ -38,11 +39,13 @@ class textcolor:
 class Zig:
     def error(self, string):
         self.string = string
-        print(textcolor.FAIL + self.string)
+        stack = inspect.stack()
+        pluginname = stack[1][0].f_code.co_name
+        print(textcolor.FAIL + pluginname + self.string)
 
 zigzag = Zig()
 # test purpose:
-zig.error("Hi")
+#zigzag.error("Hi")
 
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")

@@ -83,7 +83,7 @@ for plugin in enabled_plugins:
     execfile("plugins/" + plugin + ".py")
     print(textcolor.OKBLUE + "Plugin enabled successfully: " + plugin)
   except Exception as ex:
-    print(textcolor.FAIL + "Could enable plugin: " + plugin + ". Error:")
+    print(textcolor.FAIL + "Could not enable plugin: " + plugin + ". Error:")
     print(textcolor.WARNING + str(ex))
 
 time = datetime.datetime.now()

@@ -132,7 +132,7 @@ def message_replier(messages):
     userid = message.from_user.id
     banlist = redisserver.sismember('zigzag:banlist', userid)
     if banlist:
-      returnf
+      return
     allmembers = list(redisserver.smembers('zigzag:members'))
     if userid not in allmembers:
       redisserver.sadd('zigzag:members', userid)

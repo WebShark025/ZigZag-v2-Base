@@ -38,7 +38,7 @@ class textcolor:
     RESET = '\x1b[0m'
 
 # Load Empty Dicts/Lists/Etc. 
-instephandler = []
+instephandler = {}
 
 # Define zigzag basics
 class Zig:
@@ -55,8 +55,10 @@ class Zig:
     def nextstep(self, message, function):
         self.message = message
         self.function = function
+        stack = inspect.stack()
+        pluginname = stack[1][0].f_code.co_name
         uid = eval(str(message))['chat']['id']
-        instephandler.append(uid)
+        instephandler[uid] = pluginname
         bot.register_next_step_handler(message, function)
 
 
@@ -127,8 +129,12 @@ print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time)
 # Define message handler function.
 def message_replier(messages):
   for message in messages:
-    if uid in instephandler:
+    # Check if is the message in in_step_handler?
+    if message.from_user.id in instephandler:
+      exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+      p.start()
       return
+    # Else, Try to find a regex match in all plugins.
     for plugin in pllist:
       exec("pln = pl" + plugin + ".patterns")
       try:

@@ -81,7 +81,7 @@ class Zig:
     def getuser(self, userid):
         self.userid = userid
         userinfo = redisserver.hget('zigzag:userdata', self.userid)
-        return userinfo
+        return eval(userinfo)
 
 
 

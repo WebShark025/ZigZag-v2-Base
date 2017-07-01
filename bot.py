@@ -68,6 +68,14 @@ class Zig:
         redisserver.sadd('zigzag:banlist', int(self.userid))
         bot.send_message(int(self.userid), "You are banned from the bot!", parse_mode="Markdown")
         return True
+    def unban(self, userid):
+        self.userid = userid
+        try:
+          redisserver.srem('zigzag:banlist', int(self.userid))
+        except:
+          pass
+        bot.send_message(int(self.userid), "You are unbanned from the bot!", parse_mode="Markdown")
+        return True
 
 
 

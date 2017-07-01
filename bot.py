@@ -47,11 +47,13 @@ class Zig:
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
         print(textcolor.FAIL + "[" + pluginname + "] " + self.string + textcolor.RESET)
+        return True
     def info(self, string):
         self.string = string
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
         print(textcolor.RESET + "[" + pluginname + "] " + self.string + textcolor.RESET)
+        return True
     def nextstep(self, message, function):
         self.message = message
         self.function = function

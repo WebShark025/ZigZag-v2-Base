@@ -129,11 +129,16 @@ print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time)
 # Define message handler function.
 def message_replier(messages):
   for message in messages:
+    banlist = redisserver.sismember('zigzag:banlist', userid)
+    if banlist:
+      returnf
+    redisserver.sadd('zigzag:members', userid)
+    redisserver.sadd(
+#      p.start()
+      # Whats going on onthe top line?:| IDK
     # Check if is the message in in_step_handler?
     if str(message.from_user.id) in instephandler:
 #      exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
-#      p.start()
-      # Whats going on onthe top line?:| IDK
       del instephandler[str(message.from_user.id)]
       return
     else:

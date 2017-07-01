@@ -37,6 +37,9 @@ class textcolor:
     UNDERLINE = '\033[4m'
     RESET = '\x1b[0m'
 
+# Load Empty Dicts/Lists/Etc. 
+instephandler = []
+
 # Define zigzag basics
 class Zig:
     def error(self, string):
@@ -52,7 +55,9 @@ class Zig:
     def nextstep(self, message, function):
         self.message = message
         self.function = function
-        
+        uid = eval(str(message))['chat']['id']
+        instephandler.append(uid)
+        bot.register_next_step_handler(message, function)
 
 
 
@@ -122,6 +127,8 @@ print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time)
 # Define message handler function.
 def message_replier(messages):
   for message in messages:
+    if uid in instephandler:
+      return
     for plugin in pllist:
       exec("pln = pl" + plugin + ".patterns")
       try:

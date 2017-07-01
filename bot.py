@@ -153,7 +153,7 @@ def message_replier(messages):
     if userid not in allmembers:
       redisserver.sadd('zigzag:members', userid)
       userinfo = str(message.from_user)
-      redisserver.hadd('zigzag:userdata', userid, userinfo)
+      redisserver.hset('zigzag:userdata', userid, userinfo)
     # Check if is the message in in_step_handler?
     if str(message.from_user.id) in instephandler:
 #      exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")

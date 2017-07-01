@@ -78,6 +78,10 @@ class Zig:
         zigzag.info("User {} got unbanned from the bot!".format(userid))
         bot.send_message(int(self.userid), "You are unbanned from the bot!", parse_mode="Markdown")
         return True
+    def getuser(self, userid):
+        self.userid = userid
+        userinfo = redisserver.hget('zigzag:userdata', self.userid)
+        return userinfo
 
 
 

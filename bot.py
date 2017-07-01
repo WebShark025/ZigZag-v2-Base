@@ -60,6 +60,12 @@ class Zig:
         uid = eval(str(message))['chat']['id']
         instephandler[str(uid)] = pluginname
         bot.register_next_step_handler(message, function)
+        return True
+    def ban(self, userid):
+        self.userid = userid
+        redisserver.sadd('zigzag:banlist', int(self.userid))
+        bot.send_message(int(self.userid), "You are banned from the bot!", parse_mode="Markdown")
+        return True
 
 
 

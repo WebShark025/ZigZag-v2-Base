@@ -58,7 +58,7 @@ class Zig:
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
         uid = eval(str(message))['chat']['id']
-        instephandler[uid] = pluginname
+        instephandler[str(uid)] = pluginname
         bot.register_next_step_handler(message, function)
 
 
@@ -130,22 +130,25 @@ print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time)
 def message_replier(messages):
   for message in messages:
     # Check if is the message in in_step_handler?
-    if message.from_user.id in instephandler:
-      exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
-      p.start()
+    if str(message.from_user.id) in instephandler:
+#      exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+#      p.start()
+      # Whats going on onthe top line?:| IDK
+      del instephandler[str(message.from_user.id)]
       return
-    # Else, Try to find a regex match in all plugins.
-    for plugin in pllist:
-      exec("pln = pl" + plugin + ".patterns")
-      try:
-        for rgx in pln:
-          rlnumber = re.compile(rgx)
-          args = message.text
-          if rlnumber.search(args):
-            exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
-            p.start()
-      except Exception as e:
-        zigzag.error("Error: " + str(e))
+    else:
+      # Else, Try to find a regex match in all plugins.
+      for plugin in pllist:
+        exec("pln = pl" + plugin + ".patterns")
+        try:
+          for rgx in pln:
+            rlnumber = re.compile(rgx)
+            args = message.text
+            if rlnumber.search(args):
+              exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+              p.start()
+        except Exception as e:
+          zigzag.error("Error: " + str(e))
 
 # Set message handler!
 bot.set_update_listener(message_replier)

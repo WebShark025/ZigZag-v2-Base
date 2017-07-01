@@ -15,6 +15,7 @@ import datetime
 import os
 import telebot
 import re
+import json
 import sys
 import redis
 import time as tm
@@ -48,6 +49,10 @@ class Zig:
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
         print(textcolor.RESET + "[" + pluginname + "] " + self.string + textcolor.RESET)
+    def nextstep(self, message, function):
+        self.message = message
+        self.function = function
+        
 
 
 
@@ -65,7 +70,7 @@ print("iTeam Proudly Presents!")
 print("Copyright 2017 @WebShark25")
 print("#########################################")
 print("#########################################")
-tm.sleep(5)
+tm.sleep(2)
 print("\n\n\n\n\n\n")
 
 # Enabled plugins list.

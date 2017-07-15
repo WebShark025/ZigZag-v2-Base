@@ -1,4 +1,6 @@
-####################################
+# -*- coding: utf-8 -*-
+
+# ####################################
 # The ZigZag Project v2 !          #
 # Author: WebShark25               #
 # (Mohammad Arshia Seyyed Shakeri) #
@@ -47,7 +49,7 @@ class Zig:
         self.string = string
         stack = inspect.stack()
         pluginname = stack[1][0].f_code.co_name
-        print(textcolor.FAIL + "[" + pluginname + "] " + self.string + textcolor.RESET)
+        print(textcolor.FAIL + "[" + pluginname + "] " + str(self.string) + textcolor.RESET)
         return True
     def info(self, string):
         self.string = string
@@ -70,22 +72,22 @@ class Zig:
           return False
     def ban(self, userid):
         self.userid = userid
-        redisserver.sadd('zigzag:banlist', int(self.userid))
-        bot.send_message(int(self.userid), "You are banned from the bot!", parse_mode="Markdown")
+        redisserver.sadd('arzonline:banlist', int(self.userid))
+        bot.send_message(int(self.userid), "شما از ربات بن شدید!", parse_mode="Markdown")
         zigzag.info("User {} got banned from the bot!".format(userid))
         return True
     def unban(self, userid):
         self.userid = userid
         try:
-          redisserver.srem('zigzag:banlist', int(self.userid))
+          redisserver.srem('arzonline:banlist', int(self.userid))
         except:
           pass
         zigzag.info("User {} got unbanned from the bot!".format(userid))
-        bot.send_message(int(self.userid), "You are unbanned from the bot!", parse_mode="Markdown")
+        bot.send_message(int(self.userid), "شما از ربات آنبن شدید!", parse_mode="Markdown")
         return True
     def getuser(self, userid):
         self.userid = userid
-        userinfo = redisserver.hget('zigzag:userdata', self.userid)
+        userinfo = redisserver.hget('arzonline:userdata', self.userid)
         return eval(userinfo)
 
 
@@ -95,7 +97,8 @@ zigzag = Zig()
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
-print("The ZigZag Project v2!")
+print("The ArzOnlineBot by WebShark25!")
+print("Wrotten on the ZigZag Project v2")
 print("#########################################")
 print("#########################################")
 print("iTeam Proudly Presents!")
@@ -166,16 +169,16 @@ def nextstephandler(message):
 def message_replier(messages):
   for message in messages:
     userid = message.from_user.id
-    banlist = redisserver.sismember('zigzag:banlist', userid)
+    banlist = redisserver.sismember('arzonline:banlist', userid)
     if banlist:
       return
-    allmembers = list(redisserver.smembers('zigzag:members'))
+    allmembers = list(redisserver.smembers('arzonline:members'))
     if str(userid) not in allmembers:
       if "group" in message.chat.type:
         return
-      redisserver.sadd('zigzag:members', userid)
+      redisserver.sadd('arzonline:members', userid)
       userinfo = str(message.from_user)
-      redisserver.hset('zigzag:userdata', userid, userinfo)
+      redisserver.hset('arzonline:userdata', userid, userinfo)
     if message.text == "/cancel" or message.text == "/start":
       start(message)
       return
@@ -203,6 +206,16 @@ bot.set_update_listener(message_replier)
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
   if call.message:
+    _hash = "anti_flood:user:" + str(call.from_user.id)
+    max_time = 10
+    msgs = 0
+    if redisserver.get(_hash):
+      msgs = int(redisserver.get(_hash))
+      max_msgs = 5  # msgs in
+      max_time = 10  # seconds
+      if msgs > max_msgs:
+        return
+    redisserver.setex(_hash, max_time, int(msgs) + 1)
     for plugin in pllist:
       try:
         exec("pln = pl" + plugin + ".callbacks")

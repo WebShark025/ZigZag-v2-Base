@@ -72,14 +72,14 @@ class Zig:
           return False
     def ban(self, userid):
         self.userid = userid
-        redisserver.sadd('arzonline:banlist', int(self.userid))
+        redisserver.sadd('zizgzag:banlist', int(self.userid))
         bot.send_message(int(self.userid), "شما از ربات بن شدید!", parse_mode="Markdown")
         zigzag.info("User {} got banned from the bot!".format(userid))
         return True
     def unban(self, userid):
         self.userid = userid
         try:
-          redisserver.srem('arzonline:banlist', int(self.userid))
+          redisserver.srem('zigzag:banlist', int(self.userid))
         except:
           pass
         zigzag.info("User {} got unbanned from the bot!".format(userid))
@@ -87,7 +87,7 @@ class Zig:
         return True
     def getuser(self, userid):
         self.userid = userid
-        userinfo = redisserver.hget('arzonline:userdata', self.userid)
+        userinfo = redisserver.hget('zigzag:userdata', self.userid)
         return eval(userinfo)
 
 
@@ -97,8 +97,7 @@ zigzag = Zig()
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
-print("The ArzOnlineBot by WebShark25!")
-print("Wrotten on the ZigZag Project v2")
+print("The ZigZag Project v2!")
 print("#########################################")
 print("#########################################")
 print("iTeam Proudly Presents!")
@@ -169,16 +168,16 @@ def nextstephandler(message):
 def message_replier(messages):
   for message in messages:
     userid = message.from_user.id
-    banlist = redisserver.sismember('arzonline:banlist', userid)
+    banlist = redisserver.sismember('zigzag:banlist', userid)
     if banlist:
       return
-    allmembers = list(redisserver.smembers('arzonline:members'))
+    allmembers = list(redisserver.smembers('zigzag:members'))
     if str(userid) not in allmembers:
       if "group" in message.chat.type:
         return
-      redisserver.sadd('arzonline:members', userid)
+      redisserver.sadd('zigzag:members', userid)
       userinfo = str(message.from_user)
-      redisserver.hset('arzonline:userdata', userid, userinfo)
+      redisserver.hset('zigzag:userdata', userid, userinfo)
     if message.text == "/cancel" or message.text == "/start":
       start(message)
       return

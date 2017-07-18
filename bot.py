@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# ####################################
-# The ZigZag Project v2 !          #
+# ##################################
+#          Clickpay v2 !!          #
+# Based on The ZigZag Project v2 ! #
 # Author: WebShark25               #
 # (Mohammad Arshia Seyyed Shakeri) #
 ####################################
@@ -63,7 +64,7 @@ class Zig:
           self.function = function
           stack = inspect.stack()
           pluginname = stack[1][0].f_code.co_name
-          uid = eval(str(message))['chat']['id']
+          uid = message.chat.id
           instephandler[str(uid)] = [pluginname, function]
           bot.register_next_step_handler(message, nextstephandler)
           return True
@@ -72,14 +73,14 @@ class Zig:
           return False
     def ban(self, userid):
         self.userid = userid
-        redisserver.sadd('arzonline:banlist', int(self.userid))
+        redisserver.sadd('zizgzag:banlist', int(self.userid))
         bot.send_message(int(self.userid), "شما از ربات بن شدید!", parse_mode="Markdown")
         zigzag.info("User {} got banned from the bot!".format(userid))
         return True
     def unban(self, userid):
         self.userid = userid
         try:
-          redisserver.srem('arzonline:banlist', int(self.userid))
+          redisserver.srem('zigzag:banlist', int(self.userid))
         except:
           pass
         zigzag.info("User {} got unbanned from the bot!".format(userid))
@@ -87,7 +88,7 @@ class Zig:
         return True
     def getuser(self, userid):
         self.userid = userid
-        userinfo = redisserver.hget('arzonline:userdata', self.userid)
+        userinfo = redisserver.hget('zigzag:userdata', self.userid)
         return eval(userinfo)
 
 
@@ -97,15 +98,15 @@ zigzag = Zig()
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
-print("The ArzOnlineBot by WebShark25!")
-print("Wrotten on the ZigZag Project v2")
+print("The Clickpay v2! Based on:")
+print("The ZigZag Project v2!")
 print("#########################################")
 print("#########################################")
 print("iTeam Proudly Presents!")
 print("Copyright 2017 @WebShark25")
 print("#########################################")
 print("#########################################")
-tm.sleep(2)
+tm.sleep(1)
 print("\n\n\n\n\n\n")
 
 # Enabled plugins list.
@@ -156,12 +157,20 @@ print(textcolor.OKGREEN + "Bot launched successfully. Launch time: " + str(time)
 
 # Define Next Step Handler function
 def nextstephandler(message):
+  if message.text == "/cancel":
+    try:
+      del instephandler[str(message.from_user.id)]
+    except:
+      pass
+    return
   try:
     pluginname = instephandler[str(message.from_user.id)][0]
     funcname = instephandler[str(message.from_user.id)][1]
+    if funcname == instephandler[str(message.from_user.id)][1]:
+      del instephandler[str(message.from_user.id)]
     exec("p = multiprocessing.Process(target=" + str(funcname) + "(message))")
     p.start()
-    del instephandler[str(message.from_user.id)]
+    # In this line, it conflicts with the next nextstep (if registered) thats why a doublecheck is needed
   except Exception as e:
     zigzag.error("Error registering next step: " + str(e))
 
@@ -169,16 +178,16 @@ def nextstephandler(message):
 def message_replier(messages):
   for message in messages:
     userid = message.from_user.id
-    banlist = redisserver.sismember('arzonline:banlist', userid)
+    banlist = redisserver.sismember('zigzag:banlist', userid)
     if banlist:
       return
-    allmembers = list(redisserver.smembers('arzonline:members'))
+    allmembers = list(redisserver.smembers('zigzag:members'))
     if str(userid) not in allmembers:
       if "group" in message.chat.type:
         return
-      redisserver.sadd('arzonline:members', userid)
+      redisserver.sadd('zigzag:members', userid)
       userinfo = str(message.from_user)
-      redisserver.hset('arzonline:userdata', userid, userinfo)
+      redisserver.hset('zigzag:userdata', userid, userinfo)
     if message.text == "/cancel" or message.text == "/start":
       start(message)
       return

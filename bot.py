@@ -98,10 +98,7 @@ zigzag = Zig()
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
-<<<<<<< HEAD
 print("The Clickpay v2! Based on:")
-=======
->>>>>>> 47820cbaf1df6cff28231019a1628644dfda090e
 print("The ZigZag Project v2!")
 print("#########################################")
 print("#########################################")

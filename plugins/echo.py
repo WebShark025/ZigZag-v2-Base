@@ -3,6 +3,9 @@ This is the Test Plugin for the ZigZag project! Everything in here :)
 """
 
 def echo(message):
+  # Media messages
+  if message.document :
+    bot.send_document(message.chat.id, message.document.file_id)
   # Reply Markup! Same as it was before.
   markup = types.InlineKeyboardMarkup()
   markupif = types.InlineKeyboardButton("test 'help' callback", callback_data='help')
@@ -58,6 +61,8 @@ def inlineecho(inlinequery):
 class plecho:
   # REQUIRED FIELD: *patterns* : The text patterns that you need to be passed to the plugin. Use RegEX!
   patterns = ["^[!/]echo (.*)$"]
+  # OPTIONAL FIELD: *content_types* : Content type of none-text messages to receive
+  content_types = ["document"]
   # OPTIONAL FIELD: *callbacks* : The callback-data patterns that you need to be passed to the plugin.
   callbacks = ["^help (.*)$", "^help"]
   # OPTIONAL FIELD: *inlines* : The inline-query patterns that you need to be passed to the plugin

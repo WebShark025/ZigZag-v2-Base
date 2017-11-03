@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # ##################################
-#          Clickpay v2 !!          #
+#          ClickPay v2 !!          #
 # Based on The ZigZag Project v2 ! #
 # Author: WebShark25               #
 # (Mohammad Arshia Seyyed Shakeri) #
@@ -25,6 +25,7 @@ import redis
 import time as tm
 import requests
 import inspect
+import traceback
 from shutil import copyfile
 from telebot import types
 
@@ -98,7 +99,7 @@ zigzag = Zig()
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
-print("The Clickpay v2! Based on:")
+print("The ClickPay v2! Based on:")
 print("The ZigZag Project v2!")
 print("#########################################")
 print("#########################################")
@@ -172,7 +173,8 @@ def nextstephandler(message):
     p.start()
     # In this line, it conflicts with the next nextstep (if registered) thats why a doublecheck is needed
   except Exception as e:
-    zigzag.error("Error registering next step: " + str(e))
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+      zigzag.error("Error registering next step: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
 
 
 # Define message handler function.
@@ -207,7 +209,21 @@ def message_replier(messages):
               exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
               p.start()
         except Exception as e:
-          zigzag.error("Error: " + str(e))
+          exc_type, exc_obj, exc_tb = sys.exc_info()
+          zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
+    else :
+      try :
+        for plugin in pllist:
+          exec("pln = pl" + plugin + ".content_types")
+          try:
+            if message.content_type in content_types :
+              exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+              p.start()
+          except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
+      except :
+        pass
 
 # Set message handler!
 bot.set_update_listener(message_replier)
@@ -238,8 +254,10 @@ def callback_inline(call):
           if rlnumber.search(args):
             exec("p = multiprocessing.Process(target=call" + str(plugin) + "(call))")
             p.start()
+            break
       except Exception as e:
-        zigzag.error("Error: " + str(e))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
 
 # Define inline function
 @bot.inline_handler(func=lambda query: True)
@@ -256,8 +274,10 @@ def inline_hand(inlinequery):
         if rlnumber.search(args):
           exec("p = multiprocessing.Process(target=inline" + str(plugin) + "(inlinequery))")
           p.start()
+          break
     except Exception as e:
-      zigzag.error("Error: " + str(e))
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
     if len(inlinequery.query) is 0:
       for rgx in pln:
         if rgx == "DEFAULTQUERY":

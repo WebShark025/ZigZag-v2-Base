@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
 # ##################################
-#          ClickPay v2 !!          #
+#          ZigZag  v2 !!           #
 # Based on The ZigZag Project v2 ! #
 # Author: WebShark25               #
 # (Mohammad Arshia Seyyed Shakeri) #
+####################################
+#   Author's Website:              #
+#            www.webshark25.ir     #
+#                                  #
+#    iTeam's Website:              #
+#             www.iteam-co.ir      #
 ####################################
 #                                  #
 # Copyright @2017 iTeam Product    #
@@ -99,7 +105,6 @@ zigzag = Zig()
 # Print greeting
 print(textcolor.OKBLUE + "#########################################")
 print("#########################################")
-print("The ClickPay v2! Based on:")
 print("The ZigZag Project v2!")
 print("#########################################")
 print("#########################################")

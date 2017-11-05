@@ -212,8 +212,8 @@ def message_replier(messages):
           exc_type, exc_obj, exc_tb = sys.exc_info()
           zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
     else :
-      try :
-        for plugin in pllist:
+      for plugin in pllist:
+        try :
           exec("pln = pl" + plugin + ".content_types")
           try:
             if message.content_type in content_types :
@@ -222,8 +222,8 @@ def message_replier(messages):
           except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
-      except :
-        pass
+        except :
+          pass
 
 # Set message handler!
 bot.set_update_listener(message_replier)

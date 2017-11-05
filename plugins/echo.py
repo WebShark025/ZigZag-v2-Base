@@ -6,6 +6,7 @@ def echo(message):
   # Media messages
   if message.document :
     bot.send_document(message.chat.id, message.document.file_id)
+    return
   # Reply Markup! Same as it was before.
   markup = types.InlineKeyboardMarkup()
   markupif = types.InlineKeyboardButton("test 'help' callback", callback_data='help')

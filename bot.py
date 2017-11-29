@@ -179,7 +179,7 @@ def nextstephandler(message):
     # In this line, it conflicts with the next nextstep (if registered) thats why a doublecheck is needed
   except Exception as e:
     exc_type, exc_obj, exc_tb = sys.exc_info()
-      zigzag.error("Error registering next step: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
+    zigzag.error("Error registering next step: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
 
 
 # Define message handler function.

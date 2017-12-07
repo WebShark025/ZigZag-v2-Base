@@ -219,7 +219,7 @@ def message_replier(messages):
     else :
       for plugin in pllist:
         try :
-          exec("pln = pl" + plugin + ".content_types")
+          exec("content_types = pl" + plugin + ".content_types")
           try:
             if message.content_type in content_types :
               exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")

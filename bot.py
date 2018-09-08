@@ -80,7 +80,7 @@ class Zig:
           return False
     def ban(self, userid):
         self.userid = userid
-        redisserver.sadd('zizgzag:banlist', int(self.userid))
+        redisserver.sadd('zigzag:banlist', int(self.userid))
         bot.send_message(int(self.userid), "شما از ربات بن شدید!", parse_mode="Markdown")
         zigzag.info("User {} got banned from the bot!".format(userid))
         return True
@@ -168,6 +168,10 @@ def nextstephandler(message):
       del instephandler[str(message.from_user.id)]
     except:
       pass
+    return
+  userid = message.from_user.id
+  banlist = redisserver.sismember('zigzag:banlist', userid)
+  if banlist:
     return
   try:
     pluginname = instephandler[str(message.from_user.id)][0]

@@ -27,6 +27,7 @@ import telebot
 import re
 import json
 import sys
+import thread
 import redis
 import time as tm
 import requests
@@ -215,8 +216,9 @@ def message_replier(messages):
             rlnumber = re.compile(rgx)
             args = message.text
             if rlnumber.search(args):
-              exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
-              p.start()
+              exec("thread.start_new_thread( " + str(plugin) + ", (message, ) )")
+#              exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
+#              p.start()
         except Exception as e:
           exc_type, exc_obj, exc_tb = sys.exc_info()
           zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))

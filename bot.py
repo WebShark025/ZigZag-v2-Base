@@ -179,8 +179,7 @@ def nextstephandler(message):
     funcname = instephandler[str(message.from_user.id)][1]
     if funcname == instephandler[str(message.from_user.id)][1]:
       del instephandler[str(message.from_user.id)]
-    exec("p = multiprocessing.Process(target=" + str(funcname) + "(message))")
-    p.start()
+    exec("thread.start_new_thread( " + str(funcname) + ", (message, ) )")
     # In this line, it conflicts with the next nextstep (if registered) thats why a doublecheck is needed
   except Exception as e:
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -228,8 +227,6 @@ def message_replier(messages):
             args = message.text
             if rlnumber.search(args):
               exec("thread.start_new_thread( " + str(plugin) + ", (message, ) )")
-#              exec("p = multiprocessing.Process(target=" + str(plugin) + "(message))")
-#              p.start()
         except Exception as e:
           exc_type, exc_obj, exc_tb = sys.exc_info()
           zigzag.error("Error: " + str(e) + "\nInfo :" + ''.join(traceback.format_tb(exc_tb)))
@@ -274,8 +271,7 @@ def callback_inline(call):
           rlnumber = re.compile(rgx)
           args = call.data
           if rlnumber.search(args):
-            exec("p = multiprocessing.Process(target=call" + str(plugin) + "(call))")
-            p.start()
+            exec("thread.start_new_thread( call" + str(plugin) + ", (call, ) )")
             break
       except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -294,8 +290,7 @@ def inline_hand(inlinequery):
         rlnumber = re.compile(rgx)
         args = inlinequery.query
         if rlnumber.search(args):
-          exec("p = multiprocessing.Process(target=inline" + str(plugin) + "(inlinequery))")
-          p.start()
+          exec("thread.start_new_thread( inline" + str(plugin) + ", (inlinequery, ) )")
           break
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -303,8 +298,7 @@ def inline_hand(inlinequery):
     if len(inlinequery.query) is 0:
       for rgx in pln:
         if rgx == "DEFAULTQUERY":
-          exec("p = multiprocessing.Process(target=inline" + str(plugin) + "(inlinequery))")
-          p.start()
+          exec("thread.start_new_thread( inline" + str(plugin) + ", (inlinequery, ) )")
 
 # Poll! Lets go.
 bot.polling(none_stop=True, interval=0, timeout=3)

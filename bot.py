@@ -191,6 +191,17 @@ def nextstephandler(message):
 def message_replier(messages):
   for message in messages:
     userid = message.from_user.id
+    _hash = "anti_floodmsg:user:" + str(message.from_user.id)
+    max_time = 10
+    msgs = 0
+    if redisserver.get(_hash):
+      msgs = int(redisserver.get(_hash))
+      max_msgs = 3  # msgs in
+      max_time = 10  # seconds
+      if msgs > max_msgs:
+        zigzag.info("Request dropped due to antispam prevention. Userid: {}".format(message.chat.id))
+        return
+    redisserver.setex(_hash, max_time, int(msgs) + 1)
     banlist = redisserver.sismember('zigzag:banlist', userid)
     if banlist:
       return
